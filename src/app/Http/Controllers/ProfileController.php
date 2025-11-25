@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ProfileUpdateRequest;
+use App\Http\Requests\ProfileRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -26,7 +26,7 @@ class ProfileController extends Controller
         return view('profile.edit', compact('user'));
     }
 
-    public function update(ProfileUpdateRequest $request)
+    public function update(ProfileRequest $request)
     {
         $user = Auth::user();
         $data = $request->validated();
@@ -51,7 +51,7 @@ class ProfileController extends Controller
         return view('profile.initial-setup');
     }
 
-    public function storeInitialSetup(ProfileUpdateRequest $request)
+    public function storeInitialSetup(ProfileRequest $request)
     {
         $user = Auth::user();
         $data = $request->validated();

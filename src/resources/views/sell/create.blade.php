@@ -27,9 +27,14 @@
                 <label>カテゴリー</label>
                 <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.5rem;">
                     @foreach($categories as $category)
-                        <label style="display: flex; align-items: center; cursor: pointer;">
-                            <input type="checkbox" name="categories[]" value="{{ $category->id }}" style="margin-right: 0.5rem;">
-                            <span style="background: #f0f0f0; padding: 0.5rem 1rem; border-radius: 20px;">{{ $category->name }}</span>
+                        <label class="category-button" style="display: inline-block; cursor: pointer; margin: 0;">
+                            <input type="checkbox" name="categories[]" value="{{ $category->id }}" 
+                                   {{ in_array($category->id, old('categories', [])) ? 'checked' : '' }} 
+                                   class="category-checkbox"
+                                   style="display: none;">
+                            <span class="category-button-text" style="display: inline-block; padding: 0.5rem 1rem; border-radius: 20px; border: 1px solid #e74c3c; background: #fff; color: #e74c3c; transition: all 0.3s; user-select: none;">
+                                {{ $category->name }}
+                            </span>
                         </label>
                     @endforeach
                 </div>
@@ -109,6 +114,49 @@ function previewImage(input) {
         reader.readAsDataURL(input.files[0]);
     }
 }
+
+function updateCategoryButtons() {
+    const categoryButtons = document.querySelectorAll('.category-button');
+    categoryButtons.forEach(function(button) {
+        const checkbox = button.querySelector('input[type="checkbox"]');
+        const span = button.querySelector('.category-button-text');
+        if (checkbox && span) {
+            if (checkbox.checked) {
+                span.style.background = '#e74c3c';
+                span.style.color = '#fff';
+            } else {
+                span.style.background = '#fff';
+                span.style.color = '#e74c3c';
+            }
+        }
+    });
+}
+
+// ページ読み込み時に初期状態を設定
+document.addEventListener('DOMContentLoaded', function() {
+    updateCategoryButtons();
+    
+    // カテゴリボタン（labelタグ）のクリックイベント
+    const categoryButtons = document.querySelectorAll('.category-button');
+    categoryButtons.forEach(function(button) {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            const checkbox = button.querySelector('input[type="checkbox"]');
+            if (checkbox) {
+                checkbox.checked = !checkbox.checked;
+                updateCategoryButtons();
+            }
+        });
+    });
+    
+    // チェックボックスの変更イベントも監視（念のため）
+    const checkboxes = document.querySelectorAll('.category-checkbox');
+    checkboxes.forEach(function(checkbox) {
+        checkbox.addEventListener('change', function() {
+            updateCategoryButtons();
+        });
+    });
+});
 </script>
 @endsection
 

@@ -39,6 +39,9 @@ class LoginRequest extends FormRequest
     public static function validateData(array $input): array
     {
         $request = new static();
+        
+        // 言語を日本語に設定
+        app()->setLocale('ja');
 
         return validator($input, $request->rules(), $request->messages())->validate();
     }

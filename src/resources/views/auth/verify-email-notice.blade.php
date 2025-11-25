@@ -16,6 +16,14 @@
         @endif
     </div>
     
+    <div style="text-align: center; margin: 2rem 0;">
+        <p style="margin-bottom: 1rem;">認証メールに記載されている「認証はこちらから」リンクをクリックして認証を完了してください。</p>
+        <a href="{{ route('auth.email-verification-notice') }}" class="btn btn-primary" style="display: inline-block; padding: 0.75rem 2rem; background: #e74c3c; color: #fff; text-decoration: none; border-radius: 4px; margin-top: 1rem;">
+            認証はこちらから
+        </a>
+        <p style="margin-top: 1rem; color: #666; font-size: 0.9rem;">※ メール認証サイトにアクセスするには、認証メールに記載されているリンクをクリックしてください。</p>
+    </div>
+    
     <form method="POST" action="{{ route('verification.send') }}">
         @csrf
         <div style="text-align: center; margin-top: 1rem;">

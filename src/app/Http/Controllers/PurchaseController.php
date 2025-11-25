@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AddressRequest;
 use App\Http\Requests\PurchaseRequest;
 use App\Models\Item;
 use App\Models\Purchase;
@@ -43,7 +44,7 @@ class PurchaseController extends Controller
         return view('purchase.address', compact('item', 'user'));
     }
 
-    public function updateAddress(Request $request, $itemId)
+    public function updateAddress(AddressRequest $request, $itemId)
     {
         if (!Auth::check()) {
             return redirect()->route('login');

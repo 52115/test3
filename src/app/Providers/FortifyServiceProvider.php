@@ -17,6 +17,8 @@ use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use Laravel\Fortify\Actions\RedirectIfTwoFactorAuthenticatable;
 use Laravel\Fortify\Contracts\LoginViewResponse;
+use Laravel\Fortify\Contracts\RegisterResponse;
+use Laravel\Fortify\Contracts\VerifyEmailResponse;
 use Laravel\Fortify\Fortify;
 
 class FortifyServiceProvider extends ServiceProvider
@@ -28,6 +30,14 @@ class FortifyServiceProvider extends ServiceProvider
     {
         $this->app->singleton(LoginViewResponse::class, function ($app) {
             return new \App\Actions\Fortify\LoginViewResponse();
+        });
+
+        $this->app->singleton(RegisterResponse::class, function ($app) {
+            return new \App\Actions\Fortify\RegisteredResponse();
+        });
+
+        $this->app->singleton(VerifyEmailResponse::class, function ($app) {
+            return new \App\Actions\Fortify\VerifiedEmailResponse();
         });
     }
 
@@ -46,6 +56,9 @@ class FortifyServiceProvider extends ServiceProvider
         Fortify::verifyEmailView(fn () => view('auth.verify-email'));
 
         Fortify::authenticateUsing(function (Request $request) {
+            // 言語を日本語に設定
+            app()->setLocale('ja');
+            
             $credentials = LoginRequest::validateData($request->only('email', 'password'));
             $user = User::where('email', $credentials['email'])->first();
 

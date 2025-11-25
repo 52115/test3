@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\SellRequest;
+use App\Http\Requests\ExhibitionRequest;
 use App\Models\Category;
 use App\Models\Item;
 use Illuminate\Http\Request;
@@ -17,7 +17,7 @@ class SellController extends Controller
         return view('sell.create', compact('categories'));
     }
 
-    public function store(SellRequest $request)
+    public function store(ExhibitionRequest $request)
     {
         if (!Auth::check()) {
             return redirect()->route('login');
