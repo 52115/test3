@@ -1,0 +1,20 @@
+<?php
+
+namespace App\Actions\Fortify;
+
+use Illuminate\Http\Request;
+use Laravel\Fortify\Contracts\LoginViewResponse as LoginViewResponseContract;
+
+class LoginViewResponse implements LoginViewResponseContract
+{
+    /**
+     * Create an HTTP response that represents the object.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function toResponse($request)
+    {
+        return view('auth.login');
+    }
+}

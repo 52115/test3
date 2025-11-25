@@ -1,0 +1,58 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: fleamarket_mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: fleamarket
+      MYSQL_USER: laravel
+      MYSQL_PASSWORD: laravel
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./docker/mysql/data:/var/lib/mysql
+      - ./docker/mysql/my.cnf:/etc/mysql/conf.d/my.cnf
+    networks:
+      - fleamarket_network
+
+  php:
+    build:
+      context: ./docker/php
+      dockerfile: Dockerfile
+    container_name: fleamarket_php
+    volumes:
+      - ./src:/var/www/html
+    working_dir: /var/www/html
+    networks:
+      - fleamarket_network
+    depends_on:
+      - mysql
+
+  nginx:
+    image: nginx:alpine
+    container_name: fleamarket_nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./src:/var/www/html
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - php
+    networks:
+      - fleamarket_network
+
+  mailhog:
+    image: mailhog/mailhog:latest
+    container_name: fleamarket_mailhog
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+    networks:
+      - fleamarket_network
+
+networks:
+  fleamarket_network:
+    driver: bridge
+

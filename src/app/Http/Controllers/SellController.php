@@ -1,0 +1,46 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Http\Requests\SellRequest;
+use App\Models\Category;
+use App\Models\Item;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+
+class SellController extends Controller
+{
+    public function create()
+    {
+        $categories = Category::all();
+        return view('sell.create', compact('categories'));
+    }
+
+    public function store(SellRequest $request)
+    {
+        if (!Auth::check()) {
+            return redirect()->route('login');
+        }
+
+        // 画像アップロード
+        $imagePath = $request->file('image')->store('items', 'public');
+        $imageUrl = '/storage/' . $imagePath;
+
+        // 商品作成
+        $item = Item::create([
+            'user_id' => Auth::id(),
+            'name' => $request->name,
+            'description' => $request->description,
+            'brand_name' => $request->brand_name,
+            'price' => $request->price,
+            'condition' => $request->condition,
+            'image_url' => $imageUrl,
+        ]);
+
+        // カテゴリの紐付け
+        $item->categories()->attach($request->categories);
+
+        return redirect()->route('items.index')->with('success', '商品を出品しました');
+    }
+}
