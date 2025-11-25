@@ -6,7 +6,7 @@
 <div class="form-container">
     <h1>商品の出品</h1>
     
-    <form method="POST" action="{{ route('sell.store') }}" enctype="multipart/form-data">
+    <form method="POST" action="{{ route('sell.store') }}" enctype="multipart/form-data" novalidate>
         @csrf
         
         <div class="form-group">
@@ -36,16 +36,19 @@
                 @error('categories')
                     <div class="error-message">{{ $message }}</div>
                 @enderror
+                @error('categories.*')
+                    <div class="error-message">{{ $message }}</div>
+                @enderror
             </div>
             
             <div>
                 <label for="condition">商品の状態</label>
-                <select name="condition" id="condition" required>
+                <select name="condition" id="condition" required class="@error('condition') error @enderror">
                     <option value="">選択してください</option>
-                    <option value="良好">良好</option>
-                    <option value="目立った傷や汚れなし">目立った傷や汚れなし</option>
-                    <option value="やや傷や汚れあり">やや傷や汚れあり</option>
-                    <option value="状態が悪い">状態が悪い</option>
+                    <option value="良好" {{ old('condition') == '良好' ? 'selected' : '' }}>良好</option>
+                    <option value="目立った傷や汚れなし" {{ old('condition') == '目立った傷や汚れなし' ? 'selected' : '' }}>目立った傷や汚れなし</option>
+                    <option value="やや傷や汚れあり" {{ old('condition') == 'やや傷や汚れあり' ? 'selected' : '' }}>やや傷や汚れあり</option>
+                    <option value="状態が悪い" {{ old('condition') == '状態が悪い' ? 'selected' : '' }}>状態が悪い</option>
                 </select>
                 @error('condition')
                     <div class="error-message">{{ $message }}</div>
@@ -57,7 +60,7 @@
             <label>商品名と説明</label>
             <div style="margin-bottom: 1rem;">
                 <label for="name">商品名</label>
-                <input type="text" name="name" id="name" value="{{ old('name') }}" required>
+                <input type="text" name="name" id="name" value="{{ old('name') }}" required class="@error('name') error @enderror">
                 @error('name')
                     <div class="error-message">{{ $message }}</div>
                 @enderror
@@ -65,7 +68,7 @@
             
             <div style="margin-bottom: 1rem;">
                 <label for="brand_name">ブランド名</label>
-                <input type="text" name="brand_name" id="brand_name" value="{{ old('brand_name') }}">
+                <input type="text" name="brand_name" id="brand_name" value="{{ old('brand_name') }}" class="@error('brand_name') error @enderror">
                 @error('brand_name')
                     <div class="error-message">{{ $message }}</div>
                 @enderror
@@ -73,7 +76,7 @@
             
             <div>
                 <label for="description">商品の説明</label>
-                <textarea name="description" id="description" required>{{ old('description') }}</textarea>
+                <textarea name="description" id="description" required class="@error('description') error @enderror">{{ old('description') }}</textarea>
                 @error('description')
                     <div class="error-message">{{ $message }}</div>
                 @enderror
@@ -84,7 +87,7 @@
             <label for="price">販売価格</label>
             <div style="display: flex; align-items: center;">
                 <span style="margin-right: 0.5rem;">¥</span>
-                <input type="number" name="price" id="price" value="{{ old('price') }}" min="1" required>
+                <input type="number" name="price" id="price" value="{{ old('price') }}" min="1" required style="flex: 1;" class="@error('price') error @enderror">
             </div>
             @error('price')
                 <div class="error-message">{{ $message }}</div>

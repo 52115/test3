@@ -28,4 +28,15 @@ class PurchaseRequest extends FormRequest
             'building_name' => ['nullable', 'string', 'max:255'],
         ];
     }
+
+    public function messages(): array
+    {
+        return [
+            'payment_method.required' => '支払い方法を選択してください',
+            'payment_method.in' => '支払い方法が無効です',
+            'postal_code.max' => '郵便番号は10文字以内で入力してください',
+            'address.max' => '住所は255文字以内で入力してください',
+            'building_name.max' => '建物名は255文字以内で入力してください',
+        ];
+    }
 }

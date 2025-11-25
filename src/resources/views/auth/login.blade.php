@@ -6,12 +6,12 @@
 <div class="form-container">
     <h1>ログイン</h1>
     
-    <form method="POST" action="{{ route('login') }}">
+    <form method="POST" action="{{ route('login') }}" novalidate>
         @csrf
         
         <div class="form-group">
             <label for="email">メールアドレス</label>
-            <input type="email" id="email" name="email" value="{{ old('email') }}" required>
+            <input type="email" id="email" name="email" value="{{ old('email') }}" required class="@error('email') error @enderror">
             @error('email')
                 <div class="error-message">{{ $message }}</div>
             @enderror
@@ -19,7 +19,7 @@
         
         <div class="form-group">
             <label for="password">パスワード</label>
-            <input type="password" id="password" name="password" required>
+            <input type="password" id="password" name="password" required class="@error('password') error @enderror">
             @error('password')
                 <div class="error-message">{{ $message }}</div>
             @enderror

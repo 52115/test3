@@ -32,4 +32,26 @@ class SellRequest extends FormRequest
             'image' => ['required', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
         ];
     }
+
+    public function messages(): array
+    {
+        return [
+            'name.required' => '商品名を入力してください',
+            'name.max' => '商品名は255文字以内で入力してください',
+            'description.required' => '商品の説明を入力してください',
+            'brand_name.max' => 'ブランド名は255文字以内で入力してください',
+            'price.required' => '販売価格を入力してください',
+            'price.integer' => '販売価格は数値で入力してください',
+            'price.min' => '販売価格は1円以上で入力してください',
+            'condition.required' => '商品の状態を選択してください',
+            'categories.required' => 'カテゴリーを選択してください',
+            'categories.array' => 'カテゴリーを選択してください',
+            'categories.min' => 'カテゴリーを1つ以上選択してください',
+            'categories.*.exists' => '選択されたカテゴリーが無効です',
+            'image.required' => '商品画像を選択してください',
+            'image.image' => '画像ファイルを選択してください',
+            'image.mimes' => '画像はjpeg、png、jpg、gif形式で選択してください',
+            'image.max' => '画像サイズは2MB以下で選択してください',
+        ];
+    }
 }

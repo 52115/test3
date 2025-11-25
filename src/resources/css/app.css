@@ -199,12 +199,6 @@ main {
     resize: vertical;
 }
 
-.error-message {
-    color: red;
-    font-size: 0.875rem; /* 少し小さめ */
-    margin-top: 0.25rem; /* 入力欄との隙間 */
-}
-
 .btn {
     padding: 0.75rem 2rem;
     border: none;
@@ -227,9 +221,18 @@ main {
 }
 
 .error-message {
-    color: #e74c3c;
+    color: #e74c3c !important;
     font-size: 0.875rem;
-    margin-top: 0.25rem;
+    margin-top: 0.5rem;
+    display: block !important;
+    font-weight: normal;
+    line-height: 1.4;
+}
+
+.form-group input.error,
+.form-group textarea.error,
+.form-group select.error {
+    border-color: #e74c3c !important;
 }
 
 /* 商品詳細 */

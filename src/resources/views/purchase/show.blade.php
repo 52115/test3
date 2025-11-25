@@ -13,13 +13,16 @@
         
         <div style="border-top: 1px solid #ddd; padding-top: 1rem; margin-bottom: 2rem;">
             <h3>支払い方法</h3>
-            <form method="POST" action="{{ route('purchase.store', $item->id) }}" id="purchase-form">
+            <form method="POST" action="{{ route('purchase.store', $item->id) }}" id="purchase-form" novalidate>
                 @csrf
-                <select name="payment_method" id="payment_method" required style="width: 100%; padding: 0.5rem; margin-top: 0.5rem;">
+                <select name="payment_method" id="payment_method" required style="width: 100%; padding: 0.5rem; margin-top: 0.5rem;" class="@error('payment_method') error @enderror">
                     <option value="">選択してください</option>
-                    <option value="コンビニ支払い">コンビニ支払い</option>
-                    <option value="カード支払い">カード支払い</option>
+                    <option value="コンビニ支払い" {{ old('payment_method') == 'コンビニ支払い' ? 'selected' : '' }}>コンビニ支払い</option>
+                    <option value="カード支払い" {{ old('payment_method') == 'カード支払い' ? 'selected' : '' }}>カード支払い</option>
                 </select>
+                @error('payment_method')
+                    <div class="error-message">{{ $message }}</div>
+                @enderror
             </form>
         </div>
         

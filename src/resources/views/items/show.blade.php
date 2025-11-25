@@ -61,7 +61,7 @@
                     @csrf
                     <div class="form-group">
                         <label>商品へのコメント</label>
-                        <textarea name="content" required></textarea>
+                        <textarea name="content" required class="@error('content') error @enderror">{{ old('content') }}</textarea>
                         @error('content')
                             <div class="error-message">{{ $message }}</div>
                         @enderror
