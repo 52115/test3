@@ -43,6 +43,19 @@ class LoginRequest extends FormRequest
         // 言語を日本語に設定
         app()->setLocale('ja');
 
-        return validator($input, $request->rules(), $request->messages())->validate();
+        $rules = $request->rules();
+        $messages = [
+            'email.required' => 'メールアドレスを入力してください',
+            'email.email' => 'メールアドレスはメール形式で入力してください',
+            'password.required' => 'パスワードを入力してください',
+        ];
+
+        $validator = \Illuminate\Support\Facades\Validator::make($input, $rules, $messages);
+        
+        if ($validator->fails()) {
+            throw new \Illuminate\Validation\ValidationException($validator);
+        }
+
+        return $validator->validated();
     }
 }
