@@ -1,0 +1,85 @@
+erDiagram
+    users {
+        unsigned_bigint id PK
+        varchar name
+        varchar email UK
+        timestamp email_verified_at
+        varchar password
+        varchar remember_token
+        varchar profile_image
+        varchar postal_code
+        varchar address
+        varchar building_name
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    items {
+        unsigned_bigint id PK
+        unsigned_bigint user_id FK
+        varchar name
+        text description
+        varchar brand_name
+        integer price
+        varchar condition
+        varchar image_url
+        unsigned_bigint buyer_id FK
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    categories {
+        unsigned_bigint id PK
+        varchar name
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    comments {
+        unsigned_bigint id PK
+        unsigned_bigint user_id FK
+        unsigned_bigint item_id FK
+        varchar content
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    favorites {
+        unsigned_bigint id PK
+        unsigned_bigint user_id FK
+        unsigned_bigint item_id FK
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    purchases {
+        unsigned_bigint id PK
+        unsigned_bigint user_id FK
+        unsigned_bigint item_id FK
+        varchar payment_method
+        varchar postal_code
+        varchar address
+        varchar building_name
+        varchar stripe_payment_intent_id
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    item_category {
+        unsigned_bigint id PK
+        unsigned_bigint item_id FK
+        unsigned_bigint category_id FK
+        timestamp created_at
+        timestamp updated_at
+    }
+
+    users ||--o{ items : "出品(user_id)"
+    users ||--o{ items : "購入(buyer_id)"
+    users ||--o{ comments : "投稿"
+    users ||--o{ favorites : "いいね"
+    users ||--o{ purchases : "購入履歴"
+    items ||--o{ comments : "コメント"
+    items ||--o{ favorites : "いいね"
+    items ||--o{ purchases : "購入"
+    items }o--o{ categories : "カテゴリ"
+

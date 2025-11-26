@@ -17,11 +17,15 @@
         <div class="item-actions">
             <form action="{{ route('favorite.toggle', $item->id) }}" method="POST" style="display: inline;">
                 @csrf
-                <button type="submit" class="favorite-btn {{ $isFavorite ? 'active' : '' }}">
-                    ♥ {{ $favoriteCount }}
+                <button type="submit" class="favorite-btn {{ $isFavorite ? 'active' : '' }}" style="display: flex; align-items: center; gap: 0.5rem; background: none; border: none; cursor: pointer;">
+                    <img src="{{ asset($isFavorite ? 'images/heart-active.png' : 'images/heart.png') }}" alt="いいね" style="width: 24px; height: 24px;">
+                    <span>{{ $favoriteCount }}</span>
                 </button>
             </form>
-            <span>💬 {{ $commentCount }}</span>
+            <span style="display: flex; align-items: center; gap: 0.5rem;">
+                <img src="{{ asset('images/comment.png') }}" alt="コメント" style="width: 24px; height: 24px;">
+                <span>{{ $commentCount }}</span>
+            </span>
         </div>
         
         @auth
@@ -57,7 +61,7 @@
             @endforeach
             
             @auth
-                <form action="{{ route('comment.store', $item->id) }}" method="POST" style="margin-top: 1rem;">
+                <form action="{{ route('comment.store', $item->id) }}" method="POST" style="margin-top: 1rem;" novalidate>
                     @csrf
                     <div class="form-group">
                         <label>商品へのコメント</label>

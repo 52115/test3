@@ -1,7 +1,9 @@
 <header class="header">
     <div class="header-container">
         <div class="logo">
-            <a href="{{ route('items.index') }}">CT COACHTECH</a>
+            <a href="{{ route('items.index') }}">
+                <img src="{{ asset('images/logo.png') }}" alt="CT COACHTECH" style="height: 25px; width: auto;">
+            </a>
         </div>
         <div class="search-bar">
             <form action="{{ request()->routeIs('items.mylist') ? route('items.mylist') : route('items.index') }}" method="GET">
@@ -15,7 +17,7 @@
                     @csrf
                 </form>
                 <a href="{{ route('profile.index') }}">マイページ</a>
-                <a href="{{ route('sell.create') }}" class="btn-sell">出品</a>
+                <a href="{{ route('sell.create') }}" class="btn-sell" style="color: #000;">出品</a>
             @else
                 <a href="{{ route('login') }}">ログイン</a>
                 <a href="{{ route('register') }}">会員登録</a>
