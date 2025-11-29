@@ -26,10 +26,15 @@ class CreateNewUser implements CreatesNewUsers
             'email' => [Rule::unique(User::class)],
         ])->validate();
 
-        return User::create([
+        $user = User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
         ]);
+
+        // メール認証通知を送信
+        $user->sendEmailVerificationNotification();
+
+        return $user;
     }
 }

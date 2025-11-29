@@ -60,6 +60,42 @@ class PurchaseController extends Controller
         return redirect()->route('purchase.show', $itemId)->with('success', '住所を更新しました');
     }
 
+    public function createPaymentIntent(Request $request, $itemId)
+    {
+        if (!Auth::check()) {
+            return response()->json(['error' => '認証が必要です'], 401);
+        }
+
+        $item = Item::findOrFail($itemId);
+
+        if ($item->buyer_id) {
+            return response()->json(['error' => 'この商品は既に購入されています'], 400);
+        }
+
+        if (!config('services.stripe.secret')) {
+            return response()->json(['error' => 'Stripeが設定されていません'], 500);
+        }
+
+        try {
+            $paymentIntent = PaymentIntent::create([
+                'amount' => $item->price,
+                'currency' => 'jpy',
+                'payment_method_types' => ['card'],
+                'metadata' => [
+                    'user_id' => Auth::id(),
+                    'item_id' => $itemId,
+                ],
+            ]);
+
+            return response()->json([
+                'clientSecret' => $paymentIntent->client_secret,
+                'paymentIntentId' => $paymentIntent->id,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(['error' => '決済処理の初期化に失敗しました: ' . $e->getMessage()], 500);
+        }
+    }
+
     public function store(PurchaseRequest $request, $itemId)
     {
         if (!Auth::check()) {
@@ -72,18 +108,25 @@ class PurchaseController extends Controller
             return back()->with('error', 'この商品は既に購入されています');
         }
 
-        // Stripe決済処理（簡易版）
-        $paymentIntentId = null;
-        if (config('services.stripe.secret')) {
+        // Stripe決済処理
+        $paymentIntentId = $request->input('payment_intent_id');
+        $paymentIntentStatus = null;
+
+        if ($request->payment_method === 'カード支払い' && config('services.stripe.secret')) {
+            if (!$paymentIntentId) {
+                return back()->with('error', '決済情報が不正です');
+            }
+
             try {
-                $paymentIntent = PaymentIntent::create([
-                    'amount' => $item->price,
-                    'currency' => 'jpy',
-                    'payment_method_types' => ['card'],
-                ]);
-                $paymentIntentId = $paymentIntent->id;
+                $paymentIntent = PaymentIntent::retrieve($paymentIntentId);
+                $paymentIntentStatus = $paymentIntent->status;
+
+                // PaymentIntentが成功していない場合はエラー
+                if ($paymentIntent->status !== 'succeeded') {
+                    return back()->with('error', '決済が完了していません。ステータス: ' . $paymentIntent->status);
+                }
             } catch (\Exception $e) {
-                return back()->with('error', '決済処理に失敗しました');
+                return back()->with('error', '決済の確認に失敗しました: ' . $e->getMessage());
             }
         }
 

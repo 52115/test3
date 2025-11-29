@@ -27,6 +27,7 @@ Route::post('/sell', [SellController::class, 'store'])->name('sell.store')->midd
 Route::get('/purchase/{itemId}', [PurchaseController::class, 'show'])->name('purchase.show')->middleware('auth');
 Route::get('/purchase/address/{itemId}', [PurchaseController::class, 'address'])->name('purchase.address')->middleware('auth');
 Route::post('/purchase/address/{itemId}', [PurchaseController::class, 'updateAddress'])->name('purchase.updateAddress')->middleware('auth');
+Route::post('/purchase/{itemId}/payment-intent', [PurchaseController::class, 'createPaymentIntent'])->name('purchase.createPaymentIntent')->middleware('auth');
 Route::post('/purchase/{itemId}', [PurchaseController::class, 'store'])->name('purchase.store')->middleware('auth');
 
 // プロフィール

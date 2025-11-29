@@ -18,7 +18,7 @@ class ItemController extends Controller
         }
 
         // 検索機能
-        if ($request->has('search') && $request->search) {
+        if ($request->filled('search')) {
             $query->where('name', 'like', '%' . $request->search . '%');
         }
 
@@ -33,17 +33,21 @@ class ItemController extends Controller
             return view('items.mylist', ['items' => collect()]);
         }
 
+        // いいねした商品だけを取得
         $query = Auth::user()->favorites()->with('item.user', 'item.categories', 'item.favorites');
 
         // 検索機能
-        if ($request->has('search') && $request->search) {
+        if ($request->filled('search')) {
             $query->whereHas('item', function ($q) use ($request) {
                 $q->where('name', 'like', '%' . $request->search . '%');
             });
         }
 
         $favorites = $query->get();
-        $items = $favorites->map->item->filter();
+        // いいねした商品のItemモデルのみを取得（nullを除外）
+        $items = $favorites->map(function ($favorite) {
+            return $favorite->item;
+        })->filter();
 
         return view('items.mylist', compact('items'));
     }

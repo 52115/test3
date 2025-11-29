@@ -2,7 +2,6 @@
 
 namespace App\Actions\Fortify;
 
-use Illuminate\Http\Request;
 use Laravel\Fortify\Contracts\LoginViewResponse as LoginViewResponseContract;
 
 class LoginViewResponse implements LoginViewResponseContract

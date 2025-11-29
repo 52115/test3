@@ -1,4 +1,4 @@
-# test3
+# フリマアプリ
 
 ## 環境構築
 
@@ -73,6 +73,23 @@ php artisan storage:link
 ## ER図
 
 ![alt](ER図.png)
+
+## Stripe決済機能
+
+このアプリケーションでは、Stripeを使用したカード支払い機能を実装しています。
+
+詳細なセットアップ手順は [STRIPE_SETUP.md](./STRIPE_SETUP.md) を参照してください。
+
+### クイックスタート
+
+1. [Stripeアカウントを作成](https://stripe.com/jp)
+2. テストモードでAPIキーを取得
+3. `src/.env`に以下を設定：
+   ```env
+   STRIPE_KEY=pk_test_your_key_here
+   STRIPE_SECRET=sk_test_your_secret_here
+   ```
+4. テストカード番号: `4242 4242 4242 4242`
 
 ## URL
 
